@@ -43,6 +43,12 @@ class SolveSudoku(object):
             print(row_index, col_index)
 
     def _back_prop(self, row_index, col_index):
+        """
+
+        :param row_index:
+        :param col_index:
+        :return:
+        """
         # base case
         if self._puzzle.get_number(row_index, col_index) != '9' and not self._puzzle.is_preset(row_index, col_index):
             return row_index, col_index
