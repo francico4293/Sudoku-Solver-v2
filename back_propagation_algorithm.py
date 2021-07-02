@@ -20,15 +20,38 @@ class SolveSudoku(object):
                     if not self._in_row(row_index, str(number)) and not self._in_col(col_index, str(number)) and not \
                             self._in_square(row_index, col_index, str(number)):
                         self._puzzle.set(row_index, col_index, str(number))
-                        self.print_board()
+                        col_index += 1
                         break
                 else:
-                    print("back prop")
-                    input()
-            col_index += 1
+                    row_index, col_index = self._back_prop(row_index, col_index - 1)
+                    self.print_board()
+            elif not self._puzzle.is_preset(row_index, col_index):
+                start_number = int(self._puzzle.get_number(row_index, col_index)) + 1
+                for number in range(start_number, 10):
+                    if not self._in_row(row_index, str(number)) and not self._in_col(col_index, str(number)) and not \
+                            self._in_square(row_index, col_index, str(number)):
+                        self._puzzle.set(row_index, col_index, str(number))
+                        col_index += 1
+                        break
+                else:
+                    self._puzzle.set(row_index, col_index, '.')
+                    row_index, col_index = self._back_prop(row_index, col_index - 1)
+            else:
+                col_index += 1
 
-    def _back_prop(self):
-        pass
+            self.print_board()
+            print(row_index, col_index)
+
+    def _back_prop(self, row_index, col_index):
+        # base case
+        if self._puzzle.get_number(row_index, col_index) != '9' and not self._puzzle.is_preset(row_index, col_index):
+            return row_index, col_index
+
+        if self._puzzle.get_number(row_index, col_index) == '9' and not self._puzzle.is_preset(row_index, col_index):
+            self._puzzle.set(row_index, col_index, '.')
+            return self._back_prop(row_index, col_index - 1)
+        elif self._puzzle.is_preset(row_index, col_index):
+            return self._back_prop(row_index, col_index - 1)
 
     def _in_row(self, row_index: int, number: str) -> bool:
         """
@@ -65,9 +88,9 @@ class SolveSudoku(object):
         :return:
         """
         squares = {1: self._puzzle.get_layout()[0][:3] + self._puzzle.get_layout()[1][:3] +
-                   self._puzzle.get_layout()[3][:3],
+                   self._puzzle.get_layout()[2][:3],
                    2: self._puzzle.get_layout()[0][3:6] + self._puzzle.get_layout()[1][3:6] +
-                   self._puzzle.get_layout()[3][3:6],
+                   self._puzzle.get_layout()[2][3:6],
                    3: self._puzzle.get_layout()[0][6:] + self._puzzle.get_layout()[1][6:] +
                    self._puzzle.get_layout()[2][6:]}
 
@@ -76,7 +99,7 @@ class SolveSudoku(object):
                 if number in squares[1]:
                     return True
                 return False
-            if 3 <= col_index < 6:
+            elif 3 <= col_index < 6:
                 if number in squares[2]:
                     return True
                 return False
