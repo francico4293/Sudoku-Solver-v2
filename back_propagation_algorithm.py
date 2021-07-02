@@ -14,12 +14,17 @@ class SolveSudoku(object):
         """
         row_index, col_index = 0, 0
         while '.' in self._puzzle.get_layout()[0]:
-            if not self._puzzle.is_preset(row_index, col_index):
+            if self._puzzle.get_number(row_index, col_index) == '.' and not \
+                    self._puzzle.is_preset(row_index, col_index):
                 for number in range(1, 10):
-                    if not self._in_row(row_index, str(number)) and not self._in_col(col_index, str(number)):
+                    if not self._in_row(row_index, str(number)) and not self._in_col(col_index, str(number)) and not \
+                            self._in_square(row_index, col_index, str(number)):
                         self._puzzle.set(row_index, col_index, str(number))
                         self.print_board()
                         break
+                else:
+                    print("back prop")
+                    input()
             col_index += 1
 
     def _back_prop(self):
@@ -51,9 +56,39 @@ class SolveSudoku(object):
                 return True
         return False
 
+    def _in_square(self, row_index: int, col_index: int, number: str) -> bool:
+        """
+
+        :param row_index:
+        :param col_index:
+        :param number:
+        :return:
+        """
+        squares = {1: self._puzzle.get_layout()[0][:3] + self._puzzle.get_layout()[1][:3] +
+                   self._puzzle.get_layout()[3][:3],
+                   2: self._puzzle.get_layout()[0][3:6] + self._puzzle.get_layout()[1][3:6] +
+                   self._puzzle.get_layout()[3][3:6],
+                   3: self._puzzle.get_layout()[0][6:] + self._puzzle.get_layout()[1][6:] +
+                   self._puzzle.get_layout()[2][6:]}
+
+        if row_index == 0:
+            if 0 <= col_index < 3:
+                if number in squares[1]:
+                    return True
+                return False
+            if 3 <= col_index < 6:
+                if number in squares[2]:
+                    return True
+                return False
+            else:
+                if number in squares[3]:
+                    return True
+                return False
+
     def print_board(self):
         for row in self._puzzle.get_layout():
             print(row)
+        print()
 
 
 class Puzzle(object):
@@ -64,13 +99,45 @@ class Puzzle(object):
         self._preset_layout = self._find_presets()
 
     def get_layout(self) -> list:
-        """Returns the current layout of the Sudoku puzzle."""
+        """
+        Returns the current layout of the Sudoku puzzle.
+
+        :return: A matrix (list-of-lists) representing the Sudoku puzzle in its
+            current state.
+        """
         return self._layout
 
-    def get_row(self, row_index):
+    def get_row(self, row_index: int) -> list:
+        """
+        Returns the row that corresponds to the specified row index.
+
+        :param row_index: The index of the row to get.
+        :return: The row corresponding to the provided row index.
+        """
         return self._layout[row_index]
 
-    def set(self, row_index, col_index, number):
+    def get_number(self, row_index: int, col_index: int) -> str:
+        """
+        Returns the number in the Sudoku puzzle found in the position specified by
+        `row_index` and `col_index`.
+
+        :param row_index: The index of the row to get the number from.
+        :param col_index: The index of the column to get the number from.
+        :return: The number corresponding to the specified row index and column
+            index.
+        """
+        return self._layout[row_index][col_index]
+
+    def set(self, row_index: int, col_index: int, number: str) -> None:
+        """
+        Sets the square in the Sudoku puzzle corresponding to `row_index` and
+        `col_index`.
+
+        :param row_index: The index of the row to place the number in.
+        :param col_index: The index of the column to place the number in.
+        :param number: The number to place in the puzzle.
+        :return: None.
+        """
         self._layout[row_index][col_index] = number
 
     def is_preset(self, row_index: int, col_index: int) -> bool:
