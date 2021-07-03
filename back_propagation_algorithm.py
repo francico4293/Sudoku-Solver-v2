@@ -46,12 +46,15 @@ class SolveSudoku(object):
             self.print_board()
             print(row_index, col_index)
 
-    def _back_prop(self, row_index, col_index):
+    def _back_prop(self, row_index: int, col_index: int) -> tuple:
         """
+        Recursively moves backwards through the Sudoku puzzle until a non-preset
+        value less than 9 is found.
 
-        :param row_index:
-        :param col_index:
-        :return:
+        :param row_index: The current row index in the puzzle.
+        :param col_index: The current column index in the puzzle
+        :return: A tuple containing the row index and column index where the
+            non-preset value was found.
         """
         if col_index < 0:
             col_index = 8
@@ -95,11 +98,16 @@ class SolveSudoku(object):
 
     def _in_square(self, row_index: int, col_index: int, number: str) -> bool:
         """
+        Searches the Sudoku puzzle to see if the `number` exists in the square
+        region of the Sudoku board as indicated by the specified row index and
+        column index.
 
-        :param row_index:
-        :param col_index:
-        :param number:
-        :return:
+        :param row_index: The row index of the Sudoku puzzle to search in.
+        :param col_index: The column index of the Sudoku puzzle to search
+            in.
+        :param number: The number to search for.
+        :return: True if the number is found in the square region. Otherwise,
+            False.
         """
         squares = {1: self._puzzle.get_layout()[0][:3] + self._puzzle.get_layout()[1][:3] +
                    self._puzzle.get_layout()[2][:3],
