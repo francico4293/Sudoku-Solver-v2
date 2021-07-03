@@ -13,7 +13,11 @@ class SolveSudoku(object):
         :return:
         """
         row_index, col_index = 0, 0
-        while '.' in self._puzzle.get_layout()[0]:
+        while '.' in self._puzzle.get_row(0) or '.' in self._puzzle.get_row(1) or '.' in self._puzzle.get_row(2):
+            if col_index > 8:
+                col_index = 0
+                row_index += 1
+
             if self._puzzle.get_number(row_index, col_index) == '.' and not \
                     self._puzzle.is_preset(row_index, col_index):
                 for number in range(1, 10):
@@ -49,6 +53,10 @@ class SolveSudoku(object):
         :param col_index:
         :return:
         """
+        if col_index < 0:
+            col_index = 8
+            row_index -= 1
+
         # base case
         if self._puzzle.get_number(row_index, col_index) != '9' and not self._puzzle.is_preset(row_index, col_index):
             return row_index, col_index
@@ -100,7 +108,7 @@ class SolveSudoku(object):
                    3: self._puzzle.get_layout()[0][6:] + self._puzzle.get_layout()[1][6:] +
                    self._puzzle.get_layout()[2][6:]}
 
-        if row_index == 0:
+        if row_index == 0 or row_index == 1 or row_index == 2:
             if 0 <= col_index < 3:
                 if number in squares[1]:
                     return True
