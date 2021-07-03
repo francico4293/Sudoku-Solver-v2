@@ -1,5 +1,8 @@
 # Author: Colin Francis
 # Description: Code for back propagation algorithm used to solve Sudoku puzzles
+import time
+
+
 class SolveSudoku(object):
     """A class used to solve Sudoku puzzles."""
     def __init__(self, puzzle):
@@ -13,7 +16,8 @@ class SolveSudoku(object):
         :return:
         """
         row_index, col_index = 0, 0
-        while '.' in self._puzzle.get_row(0) or '.' in self._puzzle.get_row(1) or '.' in self._puzzle.get_row(2):
+        start_time = time.perf_counter()
+        while not self._solved():
             if col_index > 8:
                 col_index = 0
                 row_index += 1
@@ -28,7 +32,6 @@ class SolveSudoku(object):
                         break
                 else:
                     row_index, col_index = self._back_prop(row_index, col_index - 1)
-                    self.print_board()
             elif not self._puzzle.is_preset(row_index, col_index):
                 start_number = int(self._puzzle.get_number(row_index, col_index)) + 1
                 for number in range(start_number, 10):
@@ -42,9 +45,9 @@ class SolveSudoku(object):
                     row_index, col_index = self._back_prop(row_index, col_index - 1)
             else:
                 col_index += 1
-
-            self.print_board()
-            print(row_index, col_index)
+        end_time = time.perf_counter()
+        print("Solution Speed: {:.2f}s".format(end_time - start_time))
+        self.print_board()
 
     def _back_prop(self, row_index: int, col_index: int) -> tuple:
         """
@@ -114,7 +117,20 @@ class SolveSudoku(object):
                    2: self._puzzle.get_layout()[0][3:6] + self._puzzle.get_layout()[1][3:6] +
                    self._puzzle.get_layout()[2][3:6],
                    3: self._puzzle.get_layout()[0][6:] + self._puzzle.get_layout()[1][6:] +
-                   self._puzzle.get_layout()[2][6:]}
+                   self._puzzle.get_layout()[2][6:],
+                   4: self._puzzle.get_layout()[3][:3] + self._puzzle.get_layout()[4][:3] +
+                   self._puzzle.get_layout()[5][:3],
+                   5: self._puzzle.get_layout()[3][3:6] + self._puzzle.get_layout()[4][3:6] +
+                   self._puzzle.get_layout()[5][3:6],
+                   6: self._puzzle.get_layout()[3][6:] + self._puzzle.get_layout()[4][6:] +
+                   self._puzzle.get_layout()[5][6:],
+                   7: self._puzzle.get_layout()[6][:3] + self._puzzle.get_layout()[7][:3] +
+                   self._puzzle.get_layout()[8][:3],
+                   8: self._puzzle.get_layout()[6][3:6] + self._puzzle.get_layout()[7][3:6] +
+                   self._puzzle.get_layout()[8][3:6],
+                   9: self._puzzle.get_layout()[6][6:] + self._puzzle.get_layout()[7][6:] +
+                   self._puzzle.get_layout()[8][6:]
+                   }
 
         if row_index == 0 or row_index == 1 or row_index == 2:
             if 0 <= col_index < 3:
@@ -129,6 +145,45 @@ class SolveSudoku(object):
                 if number in squares[3]:
                     return True
                 return False
+        elif row_index == 3 or row_index == 4 or row_index == 5:
+            if 0 <= col_index < 3:
+                if number in squares[4]:
+                    return True
+                return False
+            elif 3 <= col_index < 6:
+                if number in squares[5]:
+                    return True
+                return False
+            else:
+                if number in squares[6]:
+                    return True
+                return False
+        else:
+            if 0 <= col_index < 3:
+                if number in squares[7]:
+                    return True
+                return False
+            elif 3 <= col_index < 6:
+                if number in squares[8]:
+                    return True
+                return False
+            else:
+                if number in squares[9]:
+                    return True
+                return False
+
+    def _solved(self) -> bool:
+        """
+        Searches each row in the Sudoku puzzle to determine if a solution has been
+        found.
+
+        :return: True if a solution has been found. Otherwise, False.
+        """
+        if '.' in self._puzzle.get_row(0) or '.' in self._puzzle.get_row(1) or '.' in self._puzzle.get_row(2) or \
+                '.' in self._puzzle.get_row(3) or '.' in self._puzzle.get_row(4) or '.' in self._puzzle.get_row(5) or \
+                '.' in self._puzzle.get_row(6) or '.' in self._puzzle.get_row(7) or '.' in self._puzzle.get_row(8):
+            return False
+        return True
 
     def print_board(self):
         for row in self._puzzle.get_layout():
