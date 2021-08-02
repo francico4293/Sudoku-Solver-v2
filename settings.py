@@ -1,5 +1,13 @@
 # Description: Contains settings for sudoku solver
 
 # Screen Constants:
-SCREEN_WIDTH = 300
-SCREEN_HEIGHT = 200
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 550
+
+# Board Constants:
+BOARD_LEFT, BOARD_TOP = 25, 75
+BOARD_WIDTH, BOARD_HEIGHT = 450, 450
+
+# Colors:
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)

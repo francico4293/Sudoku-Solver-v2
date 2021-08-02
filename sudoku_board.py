@@ -14,12 +14,21 @@ class SudokuSolver(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
+            self._board.update_board()
             pygame.display.update()
 
 
 class Board(object):
     def __init__(self):
         self._screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self._screen.fill(WHITE)
+        pygame.display.set_caption('Sudoku Solver')
+
+    def update_board(self):
+        self._draw_grid()
+
+    def _draw_grid(self):
+        pygame.draw.rect(self._screen, BLACK, pygame.Rect(BOARD_LEFT, BOARD_TOP, BOARD_WIDTH, BOARD_HEIGHT), width=3)
 
 
 if __name__ == "__main__":
