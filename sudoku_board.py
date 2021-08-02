@@ -11,6 +11,10 @@ class SudokuSolver(object):
         self._running = True
 
     def run(self):
+        """
+
+        :return:
+        """
         while self._running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -21,19 +25,34 @@ class SudokuSolver(object):
 
 class Board(object):
     def __init__(self):
+        """
+
+        """
         self._screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self._screen.fill(WHITE)
         pygame.display.set_caption('Sudoku Solver')
 
     def update_board(self):
+        """
+
+        :return:
+        """
         self._draw_grid()
 
     def _draw_grid(self):
+        """
+
+        :return:
+        """
         pygame.draw.rect(self._screen, BLACK, pygame.Rect(BOARD_LEFT, BOARD_TOP, BOARD_WIDTH, BOARD_HEIGHT), width=3)
         self._draw_vert_grid_lines()
         self._draw_horz_grid_lines()
 
     def _draw_vert_grid_lines(self):
+        """
+
+        :return:
+        """
         grid_count = 1
         for x_coord in range(BOARD_LEFT + SQUARE_WIDTH, BOARD_WIDTH + BOARD_LEFT + SQUARE_WIDTH, SQUARE_WIDTH):
             width = 1 if grid_count % 3 != 0 else 3
@@ -42,6 +61,10 @@ class Board(object):
             grid_count += 1
 
     def _draw_horz_grid_lines(self):
+        """
+
+        :return:
+        """
         grid_count = 1
         for y_coord in range(BOARD_TOP + SQUARE_HEIGHT, BOARD_HEIGHT + BOARD_TOP + SQUARE_HEIGHT, SQUARE_HEIGHT):
             width = 1 if grid_count % 3 != 0 else 3
