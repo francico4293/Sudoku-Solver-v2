@@ -1,3 +1,4 @@
+# Author: Colin Francis
 # Description: Implementation of the sudoku board using Pygame
 import pygame
 from settings import *
@@ -29,6 +30,15 @@ class Board(object):
 
     def _draw_grid(self):
         pygame.draw.rect(self._screen, BLACK, pygame.Rect(BOARD_LEFT, BOARD_TOP, BOARD_WIDTH, BOARD_HEIGHT), width=3)
+        self._draw_vert_grid_lines()
+
+    def _draw_vert_grid_lines(self):
+        grid_count = 1
+        for x_coord in range(BOARD_LEFT + SQUARE_WIDTH, BOARD_WIDTH + BOARD_LEFT + SQUARE_WIDTH, SQUARE_WIDTH):
+            width = 1 if grid_count % 3 != 0 else 3
+            pygame.draw.line(self._screen, BLACK, (x_coord, BOARD_TOP), (x_coord, BOARD_HEIGHT + BOARD_TOP),
+                             width=width)
+            grid_count += 1
 
 
 if __name__ == "__main__":
