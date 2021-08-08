@@ -19,6 +19,10 @@ class SudokuSolver(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self._board.set_selected(mouse_pos()[0], mouse_pos()[1])
+
             self._board.update_board()
             pygame.display.update()
 
@@ -29,7 +33,10 @@ class Board(object):
 
         """
         self._screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self._surface = pygame.Surface((BOARD_WIDTH, BOARD_HEIGHT))
         self._screen.fill(WHITE)
+        self._surface.fill(WHITE)
+        self._selected_square = [None] * 2
         pygame.display.set_caption('Sudoku Solver')
 
     def update_board(self):
@@ -37,7 +44,21 @@ class Board(object):
 
         :return:
         """
+        self._screen.blit(self._surface, (BOARD_LEFT, BOARD_TOP))
+        if self._selected_square != [None, None]:
+            self._color_selected()
+            self._color_row()
+            self._color_col()
         self._draw_grid()
+
+    def set_selected(self, x_coord, y_coord):
+        """
+
+        :param x_coord:
+        :param y_coord:
+        :return:
+        """
+        self._selected_square[0], self._selected_square[1] = x_coord, y_coord
 
     def _draw_grid(self):
         """
@@ -71,6 +92,34 @@ class Board(object):
             pygame.draw.line(self._screen, BLACK, (BOARD_LEFT, y_coord), (BOARD_LEFT + BOARD_WIDTH, y_coord),
                              width=width)
             grid_count += 1
+
+    def _color_selected(self):
+        """
+
+        :return:
+        """
+        pygame.draw.rect(self._screen, SQUARE_BLUE, pygame.Rect(self._selected_square[0], self._selected_square[1],
+                                                                SQUARE_WIDTH, SQUARE_HEIGHT))
+
+    def _color_row(self):
+        """
+
+        :return:
+        """
+        row_surface = pygame.Surface((BOARD_WIDTH, SQUARE_HEIGHT))
+        row_surface.set_alpha(100)
+        row_surface.fill(SQUARE_BLUE)
+        self._screen.blit(row_surface, (BOARD_LEFT, self._selected_square[1]))
+
+    def _color_col(self):
+        """
+
+        :return:
+        """
+        col_surface = pygame.Surface((SQUARE_WIDTH, BOARD_HEIGHT))
+        col_surface.set_alpha(100)
+        col_surface.fill(SQUARE_BLUE)
+        self._screen.blit(col_surface, (self._selected_square[0], BOARD_TOP))
 
 
 if __name__ == "__main__":
