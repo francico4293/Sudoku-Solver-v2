@@ -125,7 +125,7 @@ class Board(object):
             for col_index, number in enumerate(row):
                 if number != ".":
                     font = pygame.font.SysFont('Arial', 30)
-                    number_surface = font.render(number, False, BLACK)
+                    number_surface = font.render(number, True, BLACK)
                     self._screen.blit(number_surface,
                                       (BOARD_LEFT + (SQUARE_WIDTH * col_index) + (SQUARE_WIDTH / 2) - 5,
                                        BOARD_TOP + (SQUARE_HEIGHT * row_index) + (SQUARE_HEIGHT / 4) - 5
@@ -218,7 +218,9 @@ class Board(object):
 
 
 class Button(object):
+    """"""
     def __init__(self, board):
+        """"""
         self._clicked = False
         self._board = board
 
@@ -235,6 +237,7 @@ class Button(object):
         else:
             color = LIGHT_GREY
         self._draw_button(color)
+        self._button_text()
 
     def _draw_button(self, color: tuple) -> None:
         """
@@ -251,8 +254,15 @@ class Button(object):
                                      BUTTON_HEIGHT)
                          )
 
-    def _button_text(self):
-        pass
+    def _button_text(self) -> None:
+        """
+        Displays the text "Solve Puzzle" inside of the Button.
+
+        :return: None.
+        """
+        font = pygame.font.SysFont('Arial', 20)
+        text_surface = font.render('Solve Puzzle', True, BLACK)
+        self._board.blit(text_surface, (BUTTON_LEFT + 15, BUTTON_TOP + 2))
 
 
 if __name__ == "__main__":
