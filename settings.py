@@ -24,32 +24,10 @@ def mouse_pos():
 
     :return:
     """
-    if (BOARD_LEFT < pygame.mouse.get_pos()[0] <= BOARD_LEFT + SQUARE_WIDTH) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT, BOARD_TOP
-    elif (BOARD_LEFT + SQUARE_WIDTH < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 2)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + SQUARE_WIDTH, BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 2) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 3)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 2), BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 3) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 4)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 3), BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 4) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 5)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 4), BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 5) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 6)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 5), BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 6) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 7)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 6), BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 7) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 8)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 7), BOARD_TOP
-    elif (BOARD_LEFT + (SQUARE_WIDTH * 8) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 9)) and \
-            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
-        return BOARD_LEFT + (SQUARE_WIDTH * 8), BOARD_TOP
-    else:
-        return None, None
+    for row in range(9):
+        for col in range(9):
+            if (BOARD_LEFT + (SQUARE_WIDTH * row) < pygame.mouse.get_pos()[0] <=
+                BOARD_LEFT + (SQUARE_WIDTH * (row + 1))) and (BOARD_TOP + (SQUARE_HEIGHT * col)) < \
+                    pygame.mouse.get_pos()[1] <= BOARD_TOP + (SQUARE_HEIGHT * (col + 1)):
+                return BOARD_LEFT + (SQUARE_WIDTH * row), BOARD_TOP + (SQUARE_HEIGHT * col)
+    return None, None
