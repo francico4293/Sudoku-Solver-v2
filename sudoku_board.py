@@ -31,6 +31,9 @@ class SudokuSolver(object):
                     if (BOARD_LEFT <= pygame.mouse.get_pos()[0] <= BOARD_LEFT + BOARD_WIDTH) and \
                             (BOARD_TOP <= pygame.mouse.get_pos()[1] <= BOARD_TOP + BOARD_HEIGHT):
                         self._board.set_selected_coords(mouse_pos()[0], mouse_pos()[1])
+                    elif (BUTTON_LEFT <= pygame.mouse.get_pos()[0] <= BUTTON_LEFT + BUTTON_WIDTH) and \
+                            (BUTTON_TOP <= pygame.mouse.get_pos()[1] <= BUTTON_TOP + BUTTON_HEIGHT):
+                        self._board.click()
 
                 # check for a number being entered
                 if event.type == pygame.KEYDOWN:
@@ -53,6 +56,9 @@ class SudokuSolver(object):
                     elif event.key == pygame.K_9 or event.key == pygame.K_KP9:
                         self._board.set_number_by_selected(9)
 
+                if self._board.solve():
+                    self._solve()
+
             self._board.update_board(pygame.mouse.get_pos())  # update the game board
             pygame.display.update()  # update the display
 
@@ -62,6 +68,8 @@ class SudokuSolver(object):
 
         :return:
         """
+        self._board.lock_presets()
+
         row_index, col_index = 0, 0
         start_time = time.perf_counter()
         while not self._board.solved():
@@ -69,23 +77,26 @@ class SudokuSolver(object):
                 col_index = 0
                 row_index += 1
 
+            self._board.set_selected_coords(BOARD_LEFT + (SQUARE_HEIGHT * col_index),
+                                            BOARD_TOP + (SQUARE_WIDTH * row_index)
+                                            )
             if self._board.get_number(row_index, col_index) == '.' and not \
-                    self._puzzle.is_preset(row_index, col_index):
+                    self._board.is_preset(row_index, col_index):
                 for number in range(1, 10):
                     if not self._board.in_row(row_index, str(number)) and not \
                             self._board.in_col(col_index, str(number)) and not \
-                            self._in_square(row_index, col_index, str(number)):
+                            self._board.in_square(row_index, col_index, str(number)):
                         self._board.set_number_by_index(row_index, col_index, str(number))
                         col_index += 1
                         break
                 else:
                     row_index, col_index = self._back_prop(row_index, col_index - 1)
-            elif not self._puzzle.is_preset(row_index, col_index):
+            elif not self._board.is_preset(row_index, col_index):
                 start_number = int(self._board.get_number(row_index, col_index)) + 1
                 for number in range(start_number, 10):
                     if not self._board.in_row(row_index, str(number)) and not \
                             self._board.in_col(col_index, str(number)) and not \
-                            self._in_square(row_index, col_index, str(number)):
+                            self._board.in_square(row_index, col_index, str(number)):
                         self._board.set_number_by_index(row_index, col_index, str(number))
                         col_index += 1
                         break
@@ -94,10 +105,11 @@ class SudokuSolver(object):
                     row_index, col_index = self._back_prop(row_index, col_index - 1)
             else:
                 col_index += 1
+            self._board.update_board(pygame.mouse.get_pos())  # update the game board
+            pygame.display.update()  # update the display
         end_time = time.perf_counter()
-
         print("Solution Speed: {:.2f}s".format(end_time - start_time))
-        self.print_board()
+        # self.print_board()
 
     def _back_prop(self, row_index: int, col_index: int) -> tuple:
         """
@@ -162,6 +174,12 @@ class Board(object):
         self._place_numbers()
         self._draw_grid()
 
+    def solve(self) -> bool:
+        return self._button.is_clicked()
+
+    def click(self):
+        self._button.click()
+
     def get_number(self, row_index: int, col_index: int) -> str:
         """
         Returns the number in the Sudoku puzzle found in the position specified by
@@ -173,6 +191,9 @@ class Board(object):
             index.
         """
         return self._puzzle[row_index][col_index]
+
+    def lock_presets(self):
+        self._puzzle_presets = self._find_presets()
 
     def set_selected_coords(self, x_coord: int, y_coord: int) -> None:
         """
@@ -251,7 +272,7 @@ class Board(object):
                 return True
         return False
 
-    def _in_square(self, row_index: int, col_index: int, number: str) -> bool:
+    def in_square(self, row_index: int, col_index: int, number: str) -> bool:
         """
         Searches the Sudoku puzzle to see if the `number` exists in the square
         region of the Sudoku board as indicated by the specified row index and
@@ -314,6 +335,19 @@ class Board(object):
                 if number in squares[9]:
                     return True
                 return False
+
+    def is_preset(self, row_index: int, col_index: int) -> bool:
+        """
+        Determines whether a board value is a preset value or not.
+
+        :param row_index: The row corresponding to the value in the puzzle to check.
+        :param col_index: The column corresponding to the value in the puzzle to check.
+        :return: True if the value is preset. Otherwise, False.
+        """
+        if self._puzzle_presets[row_index][col_index]:
+            return True
+        else:
+            return False
 
     def _place_numbers(self) -> None:
         """
@@ -459,6 +493,12 @@ class Button(object):
             color = LIGHT_GREY
         self._draw_button(color)
         self._button_text()
+
+    def is_clicked(self):
+        return self._clicked
+
+    def click(self):
+        self._clicked = True
 
     def _draw_button(self, color: tuple) -> None:
         """
