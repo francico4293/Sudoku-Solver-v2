@@ -2,7 +2,6 @@
 # Description: Contains settings for sudoku solver
 
 import pygame
-from sudoku_board import Board
 
 # Screen Constants:
 SCREEN_WIDTH, SCREEN_HEIGHT = 500, 550
@@ -21,11 +20,36 @@ SQUARE_BLUE = (72, 199, 253)
 # Utilities:
 # Mouse Position Function
 def mouse_pos():
+    """
+
+    :return:
+    """
     if (BOARD_LEFT < pygame.mouse.get_pos()[0] <= BOARD_LEFT + SQUARE_WIDTH) and \
             (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
         return BOARD_LEFT, BOARD_TOP
     elif (BOARD_LEFT + SQUARE_WIDTH < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 2)) and \
             (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
         return BOARD_LEFT + SQUARE_WIDTH, BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 2) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 3)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 2), BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 3) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 4)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 3), BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 4) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 5)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 4), BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 5) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 6)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 5), BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 6) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 7)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 6), BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 7) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 8)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 7), BOARD_TOP
+    elif (BOARD_LEFT + (SQUARE_WIDTH * 8) < pygame.mouse.get_pos()[0] <= BOARD_LEFT + (SQUARE_WIDTH * 9)) and \
+            (BOARD_TOP < pygame.mouse.get_pos()[1] <= BOARD_TOP + SQUARE_HEIGHT):
+        return BOARD_LEFT + (SQUARE_WIDTH * 8), BOARD_TOP
     else:
         return None, None
