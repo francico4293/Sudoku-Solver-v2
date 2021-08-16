@@ -16,8 +16,9 @@ class SudokuSolver(object):
 
     def run(self) -> None:
         """
+        Load a blank puzzle board, input the puzzle, and run the solver.
 
-        :return:
+        :return: None.
         """
         while self._running:
             for event in pygame.event.get():
@@ -82,6 +83,7 @@ class Board(object):
             self._color_selected()
             self._color_row()
             self._color_col()
+        self._place_numbers()
         self._draw_grid()
 
     def set_selected(self, x_coord: int, y_coord: int) -> None:
@@ -109,6 +111,21 @@ class Board(object):
         col = (self._selected_square[0] - BOARD_LEFT) // SQUARE_WIDTH
 
         self._puzzle[row][col] = str(number)
+
+    def _place_numbers(self) -> None:
+        """
+        Places the numbers set in the puzzle onto the Sudoku Board.
+
+        :return: None.
+        """
+        for row_index, row in enumerate(self._puzzle):
+            for col_index, number in enumerate(row):
+                if number != ".":
+                    font = pygame.font.SysFont('Arial', 30)
+                    number_surface = font.render(number, False, BLACK)
+                    self._screen.blit(number_surface, (BOARD_LEFT + (SQUARE_WIDTH * col_index) + (SQUARE_WIDTH / 2) - 5,
+                                                       BOARD_TOP + (SQUARE_HEIGHT * row_index) + (SQUARE_HEIGHT / 4) - 5)
+                                      )
 
     def _draw_grid(self) -> None:
         """
