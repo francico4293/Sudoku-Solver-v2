@@ -47,7 +47,7 @@ class SudokuSolver(object):
                     elif event.key == pygame.K_9 or event.key == pygame.K_KP9:
                         self._board.set_number(9)
 
-            self._board.update_board()
+            self._board.update_board(pygame.mouse.get_pos())
             pygame.display.update()
 
 
@@ -73,7 +73,7 @@ class Board(object):
                         ]
         pygame.display.set_caption('Sudoku Solver')
 
-    def update_board(self):
+    def update_board(self, mouse_position):
         """
         Updates the state of the Sudoku Board.
 
@@ -84,7 +84,7 @@ class Board(object):
             self._color_selected()
             self._color_row()
             self._color_col()
-        self._button.update()
+        self._button.update(mouse_position)
         self._place_numbers()
         self._draw_grid()
 
@@ -222,12 +222,29 @@ class Button(object):
         self._clicked = False
         self._board = board
 
-    def update(self):
-        self._draw_button()
+    def update(self, mouse_position: tuple) -> None:
+        """
+        Updates the states of the Button.
 
-    def _draw_button(self):
+        :param mouse_position: The current position of the user's mouse.
+        :return: None.
+        """
+        if (BUTTON_LEFT <= mouse_position[0] <= BUTTON_LEFT + BUTTON_WIDTH) and \
+                (BUTTON_TOP <= mouse_position[1] <= BUTTON_TOP + BUTTON_HEIGHT):
+            color = DARK_GREY
+        else:
+            color = LIGHT_GREY
+        self._draw_button(color)
+
+    def _draw_button(self, color: tuple) -> None:
+        """
+        Draws the button on the screen.
+
+        :param color: The color of the button.
+        :return: None.
+        """
         pygame.draw.rect(self._board,
-                         LIGHT_GREY,
+                         color,
                          pygame.Rect(BUTTON_LEFT,
                                      BUTTON_TOP,
                                      BUTTON_WIDTH,

@@ -18,11 +18,12 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 SQUARE_BLUE = (72, 199, 253)
 LIGHT_GREY = (224, 224, 224)
+DARK_GREY = (160, 160, 160)
 
 
 # Utilities:
 # Mouse Position Function
-def mouse_pos():
+def mouse_pos() -> tuple:
     """
 
     :return:
