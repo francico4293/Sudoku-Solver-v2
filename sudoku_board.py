@@ -59,6 +59,7 @@ class Board(object):
         self._surface = pygame.Surface((BOARD_WIDTH, BOARD_HEIGHT))
         self._screen.fill(WHITE)
         self._surface.fill(WHITE)
+        self._button = Button(self._screen)
         self._selected_square = [None] * 2
         self._puzzle = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
                         [".", ".", ".", ".", ".", ".", ".", ".", "."],
@@ -83,6 +84,7 @@ class Board(object):
             self._color_selected()
             self._color_row()
             self._color_col()
+        self._button.update()
         self._place_numbers()
         self._draw_grid()
 
@@ -118,13 +120,16 @@ class Board(object):
 
         :return: None.
         """
+        # TODO: Find a better way to center the number
         for row_index, row in enumerate(self._puzzle):
             for col_index, number in enumerate(row):
                 if number != ".":
                     font = pygame.font.SysFont('Arial', 30)
                     number_surface = font.render(number, False, BLACK)
-                    self._screen.blit(number_surface, (BOARD_LEFT + (SQUARE_WIDTH * col_index) + (SQUARE_WIDTH / 2) - 5,
-                                                       BOARD_TOP + (SQUARE_HEIGHT * row_index) + (SQUARE_HEIGHT / 4) - 5)
+                    self._screen.blit(number_surface,
+                                      (BOARD_LEFT + (SQUARE_WIDTH * col_index) + (SQUARE_WIDTH / 2) - 5,
+                                       BOARD_TOP + (SQUARE_HEIGHT * row_index) + (SQUARE_HEIGHT / 4) - 5
+                                       )
                                       )
 
     def _draw_grid(self) -> None:
@@ -210,6 +215,27 @@ class Board(object):
         col_surface.set_alpha(100)
         col_surface.fill(SQUARE_BLUE)
         self._screen.blit(col_surface, (self._selected_square[0], BOARD_TOP))
+
+
+class Button(object):
+    def __init__(self, board):
+        self._clicked = False
+        self._board = board
+
+    def update(self):
+        self._draw_button()
+
+    def _draw_button(self):
+        pygame.draw.rect(self._board,
+                         LIGHT_GREY,
+                         pygame.Rect(BUTTON_LEFT,
+                                     BUTTON_TOP,
+                                     BUTTON_WIDTH,
+                                     BUTTON_HEIGHT)
+                         )
+
+    def _button_text(self):
+        pass
 
 
 if __name__ == "__main__":
