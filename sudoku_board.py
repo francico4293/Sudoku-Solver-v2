@@ -12,6 +12,7 @@ class SudokuSolver(object):
         self._puzzle = puzzle
         self._board = Board()
         self._running = True
+        pygame.font.init()
 
     def run(self) -> None:
         """
@@ -25,6 +26,25 @@ class SudokuSolver(object):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self._board.set_selected(mouse_pos()[0], mouse_pos()[1])
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1 or event.key == pygame.K_KP1:
+                        self._board.set_number(1)
+                    elif event.key == pygame.K_2 or event.key == pygame.K_KP2:
+                        self._board.set_number(2)
+                    elif event.key == pygame.K_3 or event.key == pygame.K_KP3:
+                        self._board.set_number(3)
+                    elif event.key == pygame.K_4 or event.key == pygame.K_KP4:
+                        self._board.set_number(4)
+                    elif event.key == pygame.K_5 or event.key == pygame.K_KP5:
+                        self._board.set_number(5)
+                    elif event.key == pygame.K_6 or event.key == pygame.K_KP6:
+                        self._board.set_number(6)
+                    elif event.key == pygame.K_7 or event.key == pygame.K_KP7:
+                        self._board.set_number(7)
+                    elif event.key == pygame.K_8 or event.key == pygame.K_KP8:
+                        self._board.set_number(8)
+                    elif event.key == pygame.K_9 or event.key == pygame.K_KP9:
+                        self._board.set_number(9)
 
             self._board.update_board()
             pygame.display.update()
@@ -39,6 +59,16 @@ class Board(object):
         self._screen.fill(WHITE)
         self._surface.fill(WHITE)
         self._selected_square = [None] * 2
+        self._puzzle = [[".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        [".", ".", ".", ".", ".", ".", ".", ".", "."],
+                        ]
         pygame.display.set_caption('Sudoku Solver')
 
     def update_board(self):
@@ -63,6 +93,22 @@ class Board(object):
         :return: None.
         """
         self._selected_square[0], self._selected_square[1] = x_coord, y_coord
+
+    def set_number(self, number: int) -> None:
+        """
+        Sets the `number` in the puzzle row / col corresponding to the currently
+        selected square.
+
+        :param number: The number to set.
+        :return: None.
+        """
+        if self._selected_square == [None] * 2:
+            return
+
+        row = (self._selected_square[1] - BOARD_TOP) // SQUARE_HEIGHT
+        col = (self._selected_square[0] - BOARD_LEFT) // SQUARE_WIDTH
+
+        self._puzzle[row][col] = str(number)
 
     def _draw_grid(self) -> None:
         """
