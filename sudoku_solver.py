@@ -8,13 +8,20 @@ from solver_settings import *
 
 
 class SudokuSolver(object):
+    """A class used to solve Sudoku puzzles."""
     pygame.font.init()
 
     def __init__(self):
+        """Creates a SudokuSolver object."""
         self._board = Board()
         self._running = True
 
     def run(self) -> None:
+        """
+        Begins running the primary program loop.
+
+        :return: None.
+        """
         while self._running:  # main program loop
             for event in pygame.event.get():
                 # check if the user wants to exit
