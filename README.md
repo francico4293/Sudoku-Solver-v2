@@ -4,3 +4,6 @@ Sudoku board and enter in a new puzzle.
 
 Note: The visual UI limits the solution speed. If you would just like to solve a puzzle quickly, you can use the file named back_propagation_algorithm.py. In this file, you can go to the bottom and manipulate the variable named "sudoku_puzzle" to be the puzzle you would like to solve. Simply run this file after you've entered your puzzle and the puzzle will
 be solved with the solution presented in a human-readable format.
+
+Sudoku Description: Sudoku is a logic-based, combinatorial number-placement puzzle. The objective is to fill a 9x9 grid with digits so that each column, each row, and each of the
+nine 3x3 subgrids that compose the grid contains all of the digits from 1 to 9.
