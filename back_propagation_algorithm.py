@@ -45,10 +45,9 @@ class SolveSudoku(object):
                     row_index, col_index = self._back_prop(row_index, col_index - 1)
             else:
                 col_index += 1
+            print(self)
         end_time = time.perf_counter()
-
         print("Solution Speed: {:.2f}s".format(end_time - start_time))
-        self.print_board()
 
     def _back_prop(self, row_index: int, col_index: int) -> tuple:
         """
@@ -186,10 +185,9 @@ class SolveSudoku(object):
             return False
         return True
 
-    def print_board(self):
-        for row in self._puzzle.get_layout():
-            print(row)
-        print()
+    def __str__(self):
+        """Prints the current state of the puzzle in human-readable form."""
+        return self._puzzle.__str__()
 
 
 class Puzzle(object):
@@ -273,6 +271,21 @@ class Puzzle(object):
             preset_values.append(list(preset_row))
             preset_row.clear()
         return preset_values
+
+    def __str__(self) -> None:
+        """
+        Prints the current puzzle values in a human-readable format.
+
+        :return: None.
+        """
+        output = ''  # initialize the string to return
+        # iterate through each row in the puzzle
+        for row in self._layout:
+            # iterate through each value in the current row
+            for index, value in enumerate(row):
+                # append value to output string, if index is 8 then start a new line
+                output = (output + value + '\n') if index == 8 else (output + value + ' ')
+        return output
 
 
 if __name__ == "__main__":
